@@ -1,6 +1,11 @@
 package views;
 
+import controllers.Controller;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,7 +22,17 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class LoginView extends Application {
+public class LoginView extends Application implements View {
+
+    private TextField userTextField = new TextField();
+    private PasswordField passwordField = new PasswordField();
+    private Button signIn = new Button("Sign in");
+
+    public Text getSignInMessage() {
+        return signInMessage;
+    }
+
+    private final Text signInMessage = new Text();
 
     public static void main(String[] args) {
         launch(args);
@@ -33,10 +48,10 @@ public class LoginView extends Application {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
-        final Text signInMessage = new Text();
+
         grid.add(signInMessage, 1, 6);
 
-        Scene scene = new Scene(grid, 300, 275);
+        Scene scene = new Scene(grid, 700, 475);
         primaryStage.setScene(scene);
 
         Text sceneTitle = new Text("Login credentials required");
@@ -47,29 +62,14 @@ public class LoginView extends Application {
         username.setFont(Font.font("Helvetica Neue", FontWeight.THIN, 15));
         grid.add(username, 0, 1);
 
-        TextField userTextField = new TextField();
-        userTextField.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                signInMessage.setFill(Color.RED);
-                signInMessage.setText("Sign in failed.");
-            }
-        });
         grid.add(userTextField, 1, 1);
 
         Label password = new Label("Password:");
         password.setFont(Font.font("Helvetica Neue", FontWeight.THIN, 15));
         grid.add(password, 0, 2);
 
-        PasswordField passwordField = new PasswordField();
-        passwordField.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                signInMessage.setFill(Color.RED);
-                signInMessage.setText("Sign in failed.");
-            }
-        });
         grid.add(passwordField, 1, 2);
 
-        Button signIn = new Button("Sign in");
         signIn.setFont(Font.font("Helvetica Neue", FontWeight.THIN, 15));
         HBox hboxButton = new HBox(10);
         hboxButton.setAlignment(Pos.BOTTOM_RIGHT);
@@ -77,16 +77,10 @@ public class LoginView extends Application {
         grid.add(hboxButton, 1, 4);
 
         signIn.setOnAction(event -> {
-            signInMessage.setFill(Color.RED);
-            signInMessage.setText("Sign in failed.");
+            Controller c = new Controller(this);
+            c.handleLogin(userTextField.getText(), passwordField.getText());
         });
-
-        signIn.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                signInMessage.setFill(Color.RED);
-                signInMessage.setText("Sign in failed.");
-            }
-        });
+        signIn.defaultButtonProperty().bind(signIn.focusTraversableProperty());
 
         primaryStage.show();
     }
