@@ -1,4 +1,8 @@
 package models;
 
-public class TaskModelComparator {
+public class TaskModelComparator implements Comparator<Task> {
+	public int compare(Task task1, Task task2)
+	{
+		return task1.getName().compareTo(task2.getName());
+	}
 }
