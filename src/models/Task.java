@@ -1,11 +1,13 @@
 package models;
 
+import java.time.LocalDate;
+
 public class Task {
 	private String name;
 	private String description;
-	private String date;
+	private LocalDate date;
 	
-	public Task(String name, String description, String date) {
+	public Task(String name, String description, LocalDate date) {
 		this.name = name;
 		this.description = description;
 		this.date = date;
@@ -19,7 +21,7 @@ public class Task {
         return description;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -31,7 +33,7 @@ public class Task {
         this.description = description;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
