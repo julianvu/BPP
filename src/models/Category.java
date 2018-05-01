@@ -1,7 +1,8 @@
 package models;
+import java.io.Serializable;
 import java.util.*;
 
-public class Category {
+public class Category implements Serializable{
 	private TreeSet<Task> tasks;
 	private String name;
 	public Category(String name) {

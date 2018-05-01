@@ -1,8 +1,9 @@
 package models;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Task {
+public class Task implements Serializable {
 	private String name;
 	private String description;
 	private LocalDate date;
@@ -38,12 +39,14 @@ public class Task {
     }
 
     public int compareTo(Task other) {
-		if(name.toUpperCase().equals(other.name.toUpperCase())) {
+		return this.date.compareTo(other.date);
+    	
+    	/*if(name.toUpperCase().equals(other.name.toUpperCase())) {
 			return 0;
 		}
 		else {
 			return 1;
-		}
+		}*/
 	}
 
 }
