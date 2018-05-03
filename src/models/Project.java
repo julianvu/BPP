@@ -1,7 +1,9 @@
 package models; 
 
 import java.io.*; 
-import java.util.*; 
+import java.util.*;
+
+import views.CategoryView; 
 
 public class Project implements Serializable{ //TODO: whats serialization 
 	private ArrayList<Category> categories; 
@@ -10,5 +12,10 @@ public class Project implements Serializable{ //TODO: whats serialization
 
 	public Project(String name) { 
 		this.name = name; 
+		this.categories = new ArrayList<>();
+	}
+
+	public ArrayList<Category> getCategories() {
+		return this.categories;
 	} 
 } 
