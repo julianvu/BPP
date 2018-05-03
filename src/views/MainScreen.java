@@ -21,6 +21,8 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import models.*;
 
+import java.time.LocalDate;
+
 public class MainScreen extends Application {
 	static private final int BUTTON_SIZE = 12;
 	static private final String ADD_IMG_URL = "/add.png";
