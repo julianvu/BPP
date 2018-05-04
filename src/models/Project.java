@@ -17,5 +17,7 @@ public class Project implements Serializable{ //TODO: whats serialization
 
 	public ArrayList<Category> getCategories() {
 		return this.categories;
-	} 
+	}
+
+	public String getName() { return this.name; }
 } 

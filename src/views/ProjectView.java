@@ -1,6 +1,7 @@
 package views; 
 
-import models.*; 
+import javafx.scene.control.Label;
+import models.*;
 
 import java.util.ArrayList;
 
@@ -12,7 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public class ProjectView extends HBox{ 
+public class ProjectView extends HBox {
 	private static final int BUTTON_SIZE = 12;
 	private static final String ADD_IMG_URL = "/add.png";
 	private Project proj; 
@@ -22,8 +23,10 @@ public class ProjectView extends HBox{
 		super(10.0); 
 		this.setMinSize(800, 400);
 		this.cats = new ArrayList<>();
-		this.proj = proj; 
+		this.proj = proj;
+        Label projTitle = new Label(proj.getName());
 		this.getChildren().addAll(cats);
+		this.getChildren().add(projTitle);
 		
 		Pane addBox = new Pane(); 
 		Image addImg = new Image(getClass().getResourceAsStream(ADD_IMG_URL));

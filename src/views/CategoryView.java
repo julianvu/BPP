@@ -2,12 +2,10 @@ package views;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import javafx.event.*;
-import javafx.geometry.Orientation;
+
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Popup;
 import javafx.stage.PopupWindow;
@@ -15,8 +13,8 @@ import models.Category;
 
 //TODO: an add task button?
 
-public class CategoryView extends VBox{
-	private ArrayList<TaskView> tasks;
+public class CategoryView extends VBox {
+	private ArrayList<TaskViewController> tasks;
 	private Category cat;
 	static private final String EDIT_IMG_URL = "/edit.png";
 	static private final String ADD_IMG_URL = "/add.png";

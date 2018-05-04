@@ -11,13 +11,13 @@ import models.Task;
 
 import java.time.LocalDate;
 
-public class TaskView extends GridPane {
+public class TaskViewController extends GridPane {
 
     private Task test;
     private Text taskName, taskDesc, taskDueDate;
     private Scene scene = new Scene(this, 400, 200);
 
-    public TaskView(Task task) {
+    public TaskViewController(Task task) {
         test = task;
         taskName = new Text(test.getName());
         taskDesc = new Text("Description: \n" + test.getDescription());
