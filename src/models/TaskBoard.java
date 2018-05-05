@@ -5,6 +5,8 @@ public class TaskBoard {
 	public TaskBoard(Project proj) {
 		this.setProj(proj);
 	}
+	public TaskBoard() {
+	}
 	public Project getProj() {
 		return proj;
 	}

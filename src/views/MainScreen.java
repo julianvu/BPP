@@ -30,6 +30,10 @@ public class MainScreen extends Application {
 	private Text signInMessage = new Text();
 	private TaskBoard tskbd;
 	
+	public MainScreen() {
+		this.tskbd = new TaskBoard();
+	}
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -143,8 +147,14 @@ public class MainScreen extends Application {
             if (result.get().isPresent()) {
                 Project project = new Project(projDialogResult.get());
                 ProjectView projectView = new ProjectView(project);
+                this.tskbd.setProj(project);
                 pane.setCenter(projectView);
+            }  
+            Label label = new Label("Project - " + tskbd.getProj().getName());
+            if (toolbar.getItems().get(0) instanceof Label) {
+            	toolbar.getItems().remove(0);
             }
+            toolbar.getItems().add(0, label);
 		});
 
 		FileChooser fc = new FileChooser();
@@ -156,7 +166,7 @@ public class MainScreen extends Application {
 			ObjectInputStream in;
 			try {
 				in = new ObjectInputStream(new FileInputStream(bppFile));
-				//	TODO: proj = (Project) in.readobject(); 
+				tskbd.setProj((Project)in.readObject()); 
 				in.close();
 			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
@@ -166,6 +176,9 @@ public class MainScreen extends Application {
 				e1.printStackTrace();
 			} catch (NullPointerException e1) {
 				
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			
 
@@ -200,6 +213,8 @@ public class MainScreen extends Application {
 
 		
 		Scene scene = new Scene(pane, 800, 600);
+		primaryStage.getIcons().add(new Image("/icon.png"));
+		primaryStage.setTitle("B++");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
