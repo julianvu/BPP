@@ -7,6 +7,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import models.Task;
 
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ public class TaskViewController extends GridPane {
 
     private Task test;
     private Text taskName, taskDesc, taskDueDate;
-    private Scene scene = new Scene(this, 400, 200);
+    private Scene scene = new Scene(this, 200, 200);
 
     public TaskViewController(Task task) {
         test = task;
@@ -76,5 +77,6 @@ public class TaskViewController extends GridPane {
 
         taskName.setWrappingWidth(scene.getWidth() - 100);
         taskDesc.setWrappingWidth(scene.getWidth() - 100);
+        
     }
 }
