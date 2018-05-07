@@ -9,10 +9,29 @@ public class Task implements Serializable {
 	private LocalDate date;
 	
 	public Task(String name, String description, LocalDate date) {
-		this.name = name;
-		this.description = description;
-		this.date = date;
+		if(name.equals(null)) {
+			this.name = "";
+		}
+		else {
+			this.name = name;
+		}
+		
+		if(description.equals(null)) {
+			this.description = "";
+		}
+		else {
+			this.description = description;
+		}
+		
+		if(date == null) {
+			this.date = LocalDate.now();
+		}
+		else {
+			this.date = date;
+		}
 	}
+
+	
 	
 	public String getName() {
 		return name;
