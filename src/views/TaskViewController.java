@@ -3,9 +3,13 @@ package views;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -19,6 +23,8 @@ import java.time.LocalDate;
 
     private Task test;
     private Label taskName, taskDesc, taskDueDate;
+    private static final String LOGIN_IMG_URL = "/login.png";
+    static private final int BUTTON_SIZE = 12;
     private Scene scene = new Scene(this, 300, 100);
 
     public TaskViewController(Task task) {
@@ -40,6 +46,16 @@ import java.time.LocalDate;
         this.add(taskName, 1, 1);
         this.add(taskDesc, 1, 2);
         this.add(taskDueDate, 1, 3);
+        
+        //delete button
+		Image deleteImg = new Image(getClass().getResourceAsStream(LOGIN_IMG_URL));
+		ImageView deleteView = new ImageView(deleteImg);
+		deleteView.setFitHeight(BUTTON_SIZE);
+		deleteView.setFitWidth(BUTTON_SIZE);
+		Button deleteButt = new Button("", deleteView);
+		deleteButt.setTooltip(new Tooltip("Delete this task"));	
+		this.add(deleteButt, 2, 1);
+		
 
         TextField nameField = new TextField(taskName.getText());
         taskName.setOnMouseClicked(event -> {
@@ -102,6 +118,11 @@ import java.time.LocalDate;
 
             taskDueDate.setOnMouseExited(event1 -> taskDueDate.setBackground(null));
         });
+        
+		deleteButt.setOnMouseClicked(e -> {
+			this.getChildren().clear();
+
+		});		
 
         taskName.setWrapText(true);
         taskDesc.setWrapText(true);
