@@ -1,21 +1,17 @@
-package views; 
+package views;
 
-import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
-import models.*;
-
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
-
-import javafx.scene.control.*;
-import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.util.Pair;
+import models.Category;
+import models.Project;
+
+import java.util.ArrayList;
+import java.util.Optional;
 
 public class ProjectView extends HBox {
 	private static final int BUTTON_SIZE = 12;
@@ -52,7 +48,12 @@ public class ProjectView extends HBox {
 		String addLayout = "-fx-border-color: black;\n" +
 						   "-fx-border-style: dashed;\n";
 		addBox.setStyle(addLayout);
-		
+
+		String bgStyle = "-fx-background-image: url(\"background.jpg\");\n" +
+                "-fx-background-repeat: no-repeat;\n" +
+                "-fx-background-size: cover";
+		this.setStyle(bgStyle);
+
 		//String catLayout = "-fx-border-color: black;\n" +
 			//			   ""
 		

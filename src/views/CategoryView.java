@@ -1,23 +1,23 @@
 package views;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
-
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.stage.Popup;
-import javafx.stage.PopupWindow;
-import javafx.util.Pair;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import models.Category;
-import models.Project;
-import models.*;
+import models.Task;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Optional;
 //TODO: an add task button?
 
 public class CategoryView extends VBox {
@@ -28,8 +28,13 @@ public class CategoryView extends VBox {
 	static private final int BUTTON_SIZE = 12;
 
 	public CategoryView(Category cat) {
-		super(10.0);
+		super();
+		this.setStyle("-fx-padding: 10 10 10 10;\n" +
+                "-fx-background-color: rgba(169, 169, 169, 0.5);\n" +
+                "-fx-background-radius: 5;\n");
+
 		this.cat = cat;
+		this.setSpacing(10);
 		Image editImg = new Image(getClass().getResourceAsStream(EDIT_IMG_URL));
 		ImageView editView = new ImageView(editImg);
 		editView.setFitHeight(BUTTON_SIZE);
@@ -48,6 +53,7 @@ public class CategoryView extends VBox {
 		HBox.setHgrow(buffer, Priority.ALWAYS);
 
 		ToolBar toolbar = new ToolBar(nameLabel, buffer, editButt, addButt);
+		toolbar.setStyle("-fx-background-radius: 5;");
 		TextField nameInput = new TextField(cat.getName());
 
 		nameLabel.setOnMouseClicked(e -> {
@@ -77,10 +83,8 @@ public class CategoryView extends VBox {
 		});
 
 		addButt.setOnMouseClicked(e -> {
-			//TODO: i want a popup window thatll create a new task + taskvc (make dummy vc while julian implements?)	
-			//I can just made a new task using taskvc directly and then add it to tasks 
-			//right here
-			Dialog<Task> dialog = new Dialog<Task>();
+			//TODO: i want a popup window thatll create a new task + taskvc (make dummy vc while julian implements?)
+			Dialog<Task> dialog = new Dialog<>();
 	        dialog.setTitle("New Task");
 	        dialog.setHeaderText(null);
 
@@ -111,7 +115,7 @@ public class CategoryView extends VBox {
 	        grid.add(dueDate, 1, 2);
 //	        grid.add(signInMessage, 1, 2);
 
-	        // Enable/Disable login button depending on whether a username was entered.
+	        // Enable/Disable okay button depending on whether a name was entered.
 	        Node okayButton = dialog.getDialogPane().lookupButton(loginButtonType);
 	        okayButton.setDisable(true);
 
@@ -122,10 +126,10 @@ public class CategoryView extends VBox {
 
 	        dialog.getDialogPane().setContent(grid);
 
-	        // Request focus on the username field by default.
-//	        Platform.runLater(() -> name.requestFocus());
+	        // Request focus on the name field by default.
+	        Platform.runLater(() -> name.requestFocus());
 
-	        // Convert the result to a username-password-pair when the login button is clicked.
+	        // Convert the result to a Task when the okay button is clicked.
 	        dialog.setResultConverter(dialogButton -> {
 	            if (dialogButton == loginButtonType) {
 	                return new Task(name.getText(), desc.getText(), dueDate.getValue());
@@ -134,24 +138,32 @@ public class CategoryView extends VBox {
 	            return null;
 	        });
 
-	        AtomicReference<Optional<Task>> result = new AtomicReference<>(dialog.showAndWait());
+	        Optional<Task> result = dialog.showAndWait();
 
-	        Task task = result.get().get();
-            System.out.println("Task name: " + task.getName() + " desc: " + task.getDescription() + " due date: " + task.getDate().toString());
-            
-            TaskViewController taskvc = new TaskViewController(task);
-            //Save or something or another
+	        if (result.isPresent()) {
+	        	Task task = result.get();
+	        	System.out.println("Task name: " + task.getName() + " desc: " + task.getDescription() + " due date: " + task.getDate().toString());
+
+				TaskViewController taskvc = new TaskViewController(task);
+				//taskvc.setGridLinesVisible(true);
+				//Save or something or another
 //            this.tasks.add(taskvc);
-            
-            this.getChildren().addAll(taskvc);
-            
-            
+
+				this.getChildren().addAll(taskvc);
+
+                taskvc.setOnDragDetected(event -> {
+                    Dragboard db = this.startDragAndDrop(TransferMode.ANY);
+
+                    System.out.println("Dragging.");
+                });
+			}
 		});
 
 		//TODO: erase this before turning it in
 		//as of rn im repeating that chunk of event handling cuz im dumb and bad at translating b/w lambda and anon inner classes
 
-		this.setMinSize(200, 100);
+		//this.setMinSize(200, 100);
+        this.setMaxHeight(100);
 		this.getChildren().add(toolbar);
 		//TODO: change taskvc to nodes (panes?) so i can use this
 		//this.getChildren().addAll(tasks);
