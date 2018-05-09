@@ -26,6 +26,7 @@ public class CategoryView extends VBox {
 	private Category cat;
 	static private final String EDIT_IMG_URL = "/edit.png";
 	static private final String ADD_IMG_URL = "/add.png";
+	private static final String LOGIN_IMG_URL = "/login.png";
 	static private final int BUTTON_SIZE = 12;
 
 	public CategoryView(Category cat) {
@@ -52,8 +53,16 @@ public class CategoryView extends VBox {
 		Label nameLabel = new Label(cat.getName());
 		HBox buffer = new HBox();
 		HBox.setHgrow(buffer, Priority.ALWAYS);
+		
+		//adding delete button
+		Image deleteImg = new Image(getClass().getResourceAsStream(LOGIN_IMG_URL));
+		ImageView deleteView = new ImageView(deleteImg);
+		deleteView.setFitHeight(BUTTON_SIZE);
+		deleteView.setFitWidth(BUTTON_SIZE);
+		Button deleteButt = new Button("", deleteView);
+		deleteButt.setTooltip(new Tooltip("Delete this category"));		
 
-		ToolBar toolbar = new ToolBar(nameLabel, buffer, editButt, addButt);
+		ToolBar toolbar = new ToolBar(nameLabel, buffer, editButt, addButt, deleteButt);
 		toolbar.setStyle("-fx-background-radius: 5;");
 		TextField nameInput = new TextField(cat.getName());
 
@@ -83,6 +92,12 @@ public class CategoryView extends VBox {
 			
 		});
 
+		deleteButt.setOnMouseClicked(e -> {
+			this.getChildren().clear();
+			//cats.remove(cats.size() - 1);
+			//move "next category" backwards
+		});		
+		
 		addButt.setOnMouseClicked(e -> {
 			//TODO: i want a popup window thatll create a new task + taskvc (make dummy vc while julian implements?)
 			Dialog<Task> dialog = new Dialog<>();

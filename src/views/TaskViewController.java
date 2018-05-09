@@ -4,11 +4,15 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -21,6 +25,8 @@ import java.time.LocalDate;
 
     private Task task;
     private Text taskName, taskDesc, taskDueDate;
+    private static final String LOGIN_IMG_URL = "/login.png";
+    static private final int BUTTON_SIZE = 12;
     private Scene scene = new Scene(this, 300, 100);
     private Color taskColor = new Color(0, 0, 0, 0);
     private BackgroundFill taskBackgroundFill = new BackgroundFill(taskColor, null, null);
@@ -53,6 +59,14 @@ import java.time.LocalDate;
         this.add(namePane, 1, 1);
         this.add(descPane, 1, 2);
         this.add(datePane, 1, 3);
+        //delete button
+		Image deleteImg = new Image(getClass().getResourceAsStream(LOGIN_IMG_URL));
+		ImageView deleteView = new ImageView(deleteImg);
+		deleteView.setFitHeight(BUTTON_SIZE);
+		deleteView.setFitWidth(BUTTON_SIZE);
+		Button deleteButt = new Button("", deleteView);
+		deleteButt.setTooltip(new Tooltip("Delete this task"));	
+		this.add(deleteButt, 2, 1);
 
         TextField nameField = new TextField(taskName.getText());
         ColorPicker colorPicker = new ColorPicker(Color.web("ff000000"));
@@ -127,7 +141,9 @@ import java.time.LocalDate;
 
             datePane.setOnMouseExited(event1 -> datePane.setBackground(null));
         });
-    }
+        
+		deleteButt.setOnMouseClicked(e -> {
+			this.getChildren().clear();
 
         public Task getTask() {
             return task;
