@@ -1,17 +1,18 @@
 package views;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import models.Category;
 import models.Task;
 
@@ -29,7 +30,7 @@ public class CategoryView extends VBox {
 
 	public CategoryView(Category cat) {
 		super();
-		this.setStyle("-fx-padding: 10 10 10 10;\n" +
+		this.setStyle("-fx-padding: 10;\n" +
                 "-fx-background-color: rgba(169, 169, 169, 0.5);\n" +
                 "-fx-background-radius: 5;\n");
 
@@ -147,14 +148,38 @@ public class CategoryView extends VBox {
 				TaskViewController taskvc = new TaskViewController(task);
 				//taskvc.setGridLinesVisible(true);
 				//Save or something or another
-//            this.tasks.add(taskvc);
+                //this.tasks.add(taskvc);
 
 				this.getChildren().addAll(taskvc);
 
+                DataFormat taskDataFormat = new DataFormat("Task");
                 taskvc.setOnDragDetected(event -> {
-                    Dragboard db = this.startDragAndDrop(TransferMode.ANY);
+                    System.out.println("setOnDragDetected");
+                    Dragboard dragboard = taskvc.startDragAndDrop(TransferMode.MOVE);
+                    ClipboardContent content = new ClipboardContent();
+                    TaskViewController taskToTransfer = taskvc;
+                    content.put(taskDataFormat, taskToTransfer);
+                    dragboard.setContent(content);
+                    this.getChildren().remove(taskvc);
+                });
 
-                    System.out.println("Dragging.");
+                this.setOnDragDone(event -> System.out.println("setOnDragDone"));
+                this.setOnDragEntered(event -> {
+                    System.out.println("setOnDragEntered");
+                    taskvc.setBlendMode(BlendMode.DIFFERENCE);
+                });
+                this.setOnDragExited(event -> {
+                    System.out.println("setOnDragExited");
+                    taskvc.setBlendMode(null);
+                });
+                this.setOnDragOver(event -> {
+                    System.out.println("setOnDragOver");
+                    event.acceptTransferModes(TransferMode.MOVE);
+                });
+                this.setOnDragDropped(event -> {
+                    System.out.println("setOnDragDropped");
+                    TaskViewController taskToConsume = (TaskViewController) event.getDragboard().getContent(taskDataFormat);
+                    this.getChildren().add(taskToConsume);
                 });
 			}
 		});
