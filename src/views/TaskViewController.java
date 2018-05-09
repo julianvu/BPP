@@ -21,7 +21,7 @@ import models.Task;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-    public class TaskViewController extends GridPane implements Serializable {
+public class TaskViewController extends GridPane implements Serializable {
 
     private Task task;
     private Text taskName, taskDesc, taskDueDate;
@@ -60,13 +60,13 @@ import java.time.LocalDate;
         this.add(descPane, 1, 2);
         this.add(datePane, 1, 3);
         //delete button
-		Image deleteImg = new Image(getClass().getResourceAsStream(LOGIN_IMG_URL));
-		ImageView deleteView = new ImageView(deleteImg);
-		deleteView.setFitHeight(BUTTON_SIZE);
-		deleteView.setFitWidth(BUTTON_SIZE);
-		Button deleteButt = new Button("", deleteView);
-		deleteButt.setTooltip(new Tooltip("Delete this task"));	
-		this.add(deleteButt, 2, 1);
+        Image deleteImg = new Image(getClass().getResourceAsStream(LOGIN_IMG_URL));
+        ImageView deleteView = new ImageView(deleteImg);
+        deleteView.setFitHeight(BUTTON_SIZE);
+        deleteView.setFitWidth(BUTTON_SIZE);
+        Button deleteButt = new Button("", deleteView);
+        deleteButt.setTooltip(new Tooltip("Delete this task"));
+        this.add(deleteButt, 2, 1);
 
         TextField nameField = new TextField(taskName.getText());
         ColorPicker colorPicker = new ColorPicker(Color.web("ff000000"));
@@ -141,31 +141,33 @@ import java.time.LocalDate;
 
             datePane.setOnMouseExited(event1 -> datePane.setBackground(null));
         });
-        
-		deleteButt.setOnMouseClicked(e -> {
-			this.getChildren().clear();
 
-        public Task getTask() {
-            return task;
-        }
+        deleteButt.setOnMouseClicked(e -> {
+            this.getChildren().clear();
+        });
+    }
 
-        public Text getTaskName() {
-            return taskName;
-        }
+    public Task getTask() {
+        return task;
+    }
 
-        public Text getTaskDesc() {
-            return taskDesc;
-        }
+    public Text getTaskName() {
+        return taskName;
+    }
 
-        public Text getTaskDueDate() {
-            return taskDueDate;
-        }
+    public Text getTaskDesc() {
+        return taskDesc;
+    }
 
-        public Color getTaskColor() {
-            return taskColor;
-        }
+    public Text getTaskDueDate() {
+        return taskDueDate;
+    }
 
-        private StackPane wrapText(Text text) {
+    public Color getTaskColor() {
+        return taskColor;
+    }
+
+    private StackPane wrapText(Text text){
         text.setWrappingWidth(150);
         StackPane toReturn = new StackPane(text);
         toReturn.setPadding(new Insets(10));
