@@ -3,129 +3,179 @@ package views;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.*;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import models.Task;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-    public class TaskViewController extends GridPane {
+public class TaskViewController extends GridPane implements Serializable {
 
-    private Task test;
-    private Label taskName, taskDesc, taskDueDate;
+    private Task task;
+    private Text taskName, taskDesc, taskDueDate;
     private static final String LOGIN_IMG_URL = "/login.png";
     static private final int BUTTON_SIZE = 12;
     private Scene scene = new Scene(this, 300, 100);
+    private Color taskColor = new Color(0, 0, 0, 0);
+    private BackgroundFill taskBackgroundFill = new BackgroundFill(taskColor, null, null);
+    private Background taskBackground = new Background(taskBackgroundFill);
 
     public TaskViewController(Task task) {
-        test = task;
-        taskName = new Label(test.getName());
-        taskDesc = new Label("Description: \n" + test.getDescription());
-        taskDueDate = new Label("Due date: " + test.getDate().toString());
+        this.task = task;
+        taskName = new Text(this.task.getName());
+        taskName.setTextAlignment(TextAlignment.CENTER);
+        taskDesc = new Text("Description: \n" + this.task.getDescription());
+        taskDueDate = new Text("Due date: " + getDate(this.task));
+
+        // Wrap Text in StackPanes
+        StackPane namePane = wrapText(taskName);
+        namePane.setPadding(new Insets(2));
+        StackPane descPane = wrapText(taskDesc);
+        StackPane datePane = wrapText(taskDueDate);
 
         String style = "-fx-border-radius: 5;\n" +
                 "-fx-border-style: solid;\n" +
-                "-fx-padding: 0 0 10 0;\n";
+                "-fx-border-color: darkgrey;\n" +
+                "-fx-padding: 10 10 10 0;\n";
         this.setStyle(style);
         this.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(5), null)));
         this.setAlignment(Pos.TOP_LEFT);
         this.setHgap(10);
-        this.setVgap(10);
+        this.setVgap(0);
         this.setPadding(new Insets(0));
 
-        this.add(taskName, 1, 1);
-        this.add(taskDesc, 1, 2);
-        this.add(taskDueDate, 1, 3);
-        
+        this.add(namePane, 1, 1);
+        this.add(descPane, 1, 2);
+        this.add(datePane, 1, 3);
         //delete button
-		Image deleteImg = new Image(getClass().getResourceAsStream(LOGIN_IMG_URL));
-		ImageView deleteView = new ImageView(deleteImg);
-		deleteView.setFitHeight(BUTTON_SIZE);
-		deleteView.setFitWidth(BUTTON_SIZE);
-		Button deleteButt = new Button("", deleteView);
-		deleteButt.setTooltip(new Tooltip("Delete this task"));	
-		this.add(deleteButt, 2, 1);
-		
+        Image deleteImg = new Image(getClass().getResourceAsStream(LOGIN_IMG_URL));
+        ImageView deleteView = new ImageView(deleteImg);
+        deleteView.setFitHeight(BUTTON_SIZE);
+        deleteView.setFitWidth(BUTTON_SIZE);
+        Button deleteButt = new Button("", deleteView);
+        deleteButt.setTooltip(new Tooltip("Delete this task"));
+        this.add(deleteButt, 2, 1);
 
         TextField nameField = new TextField(taskName.getText());
-        taskName.setOnMouseClicked(event -> {
+        ColorPicker colorPicker = new ColorPicker(Color.web("ff000000"));
+        System.out.println(colorPicker.getStyleClass().add("button"));
+        colorPicker.setStyle(".combo-box .arrow -fx-background-color: transparent;");
+        colorPicker.setPrefWidth(30);
 
-            this.getChildren().remove(taskName);
+        namePane.setOnMouseClicked(event -> {
+
+            this.getChildren().remove(namePane);
             this.add(nameField, 1, 1);
+            this.add(colorPicker, 2, 1);
 
             nameField.setOnAction(event1 -> {
                 String newName = nameField.getText();
-                test.setName(newName);
+                this.task.setName(newName);
                 taskName.setText(newName);
-                this.getChildren().remove(nameField);
-                this.add(taskName, 1, 1); //}
+                taskColor = colorPicker.getValue();
+                namePane.setBackground(new Background(new BackgroundFill(taskColor, new CornerRadii(25), null)));
+                this.getChildren().removeAll(nameField, colorPicker);
+                this.add(namePane, 1, 1); //}
             });
         });
 
-        taskName.setOnMouseEntered(event -> {
-            taskName.setBackground(new Background(new BackgroundFill(Color.GAINSBORO, null, null)));
+        namePane.setOnMouseEntered(event -> {
+            namePane.setBackground(new Background(new BackgroundFill(Color.GAINSBORO, new CornerRadii(25), null)));
 
-            taskName.setOnMouseExited(event1 -> {
-                taskName.setBackground(null);
+            namePane.setOnMouseExited(event1 -> {
+                namePane.setBackground(new Background(new BackgroundFill(taskColor, new CornerRadii(25), null)));
             });
         });
 
-        TextField descField = new TextField(test.getDescription());
-        taskDesc.setOnMouseClicked(event -> {
-            this.getChildren().remove(taskDesc);
+        TextArea descField = new TextArea(task.getDescription());
+        descPane.setOnMouseClicked(event -> {
+            descField.setMaxWidth(this.getWidth() - 20);
+            descField.setMinHeight(descPane.getHeight());
+            this.getChildren().remove(descPane);
             this.add(descField, 1, 2);
 
-            descField.setOnAction(event1 -> {
-                String newDesc = descField.getText();
-                test.setDescription(newDesc);
-                taskDesc.setText("Description: \n" + newDesc);
-                this.getChildren().remove(descField);
-                this.add(taskDesc, 1, 2);
+            descField.setOnKeyPressed(event1 -> {
+                if (event1.getCode() == KeyCode.ENTER) {
+                    String newDesc = descField.getText();
+                    this.task.setDescription(newDesc);
+                    taskDesc.setText("Description: \n" + newDesc);
+                    this.getChildren().remove(descField);
+                    this.add(descPane, 1, 2);
+                }
             });
         });
 
-        taskDesc.setOnMouseEntered(event -> {
-            taskDesc.setBackground(new Background(new BackgroundFill(Color.GAINSBORO, null, null)));
+        descPane.setOnMouseEntered(event -> {
+            descPane.setBackground(new Background(new BackgroundFill(Color.GAINSBORO, new CornerRadii(5), null)));
 
-            taskDesc.setOnMouseExited(event1 -> taskDesc.setBackground(null));
+            descPane.setOnMouseExited(event1 -> descPane.setBackground(null));
         });
 
         DatePicker dp = new DatePicker(LocalDate.now());
-        taskDueDate.setOnMouseClicked(event -> {
-            this.getChildren().remove(taskDueDate);
+        datePane.setOnMouseClicked(event -> {
+            this.getChildren().remove(datePane);
             this.add(dp, 1, 3);
 
             dp.setOnAction(event1 -> {
-                test.setDate(dp.getValue());
-                taskDueDate.setText("Due date: \n" + dp.getValue().toString());
+                this.task.setDate(dp.getValue());
+                taskDueDate.setText("Due date: " + getDate(this.task));
                 this.getChildren().remove(dp);
-                this.add(taskDueDate, 1, 3);
+                this.add(datePane, 1, 3);
             });
         });
 
-        taskDueDate.setOnMouseEntered(event -> {
-            taskDueDate.setBackground(new Background(new BackgroundFill(Color.GAINSBORO, null, null)));
+        datePane.setOnMouseEntered(event -> {
+            datePane.setBackground(new Background(new BackgroundFill(Color.GAINSBORO, new CornerRadii(5), null)));
 
-            taskDueDate.setOnMouseExited(event1 -> taskDueDate.setBackground(null));
+            datePane.setOnMouseExited(event1 -> datePane.setBackground(null));
         });
-        
-		deleteButt.setOnMouseClicked(e -> {
-			this.getChildren().clear();
 
-		});		
+        deleteButt.setOnMouseClicked(e -> {
+            this.getChildren().clear();
+        });
+    }
 
-        taskName.setWrapText(true);
-        taskDesc.setWrapText(true);
-        
+    public Task getTask() {
+        return task;
+    }
+
+    public Text getTaskName() {
+        return taskName;
+    }
+
+    public Text getTaskDesc() {
+        return taskDesc;
+    }
+
+    public Text getTaskDueDate() {
+        return taskDueDate;
+    }
+
+    public Color getTaskColor() {
+        return taskColor;
+    }
+
+    private StackPane wrapText(Text text){
+        text.setWrappingWidth(150);
+        StackPane toReturn = new StackPane(text);
+        toReturn.setPadding(new Insets(10));
+        toReturn.setAlignment(Pos.CENTER_LEFT);
+        return toReturn;
+    }
+
+    private String getDate(Task task) {
+        return task.getDate().getMonthValue() + "/" + task.getDate().getDayOfMonth() + "/" + task.getDate().getYear();
     }
 }

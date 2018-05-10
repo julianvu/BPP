@@ -1,5 +1,6 @@
 package views;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Tooltip;
@@ -17,17 +18,17 @@ public class ProjectView extends HBox {
 	private static final int BUTTON_SIZE = 12;
 	private static final String ADD_IMG_URL = "/add.png";
 	private Project proj; 
-	private ArrayList<VBox> cats; 
+	private ArrayList<VBox> cats;
 
 	public ProjectView(Project proj) { 
-		super(10.0); 
+		super(10.0);
 		this.setMinSize(800, 400);
 		this.cats = new ArrayList<>();
 		this.proj = proj;
         this.getChildren().addAll(cats);
 		//this.getChildren().add(projTitle);
 		
-		VBox addBox = new VBox(); 
+		VBox addBox = new VBox();
 		addBox.setPrefSize(200,400);
 		Image addImg = new Image(getClass().getResourceAsStream(ADD_IMG_URL));
 		ImageView addView = new ImageView(addImg);
@@ -66,10 +67,9 @@ public class ProjectView extends HBox {
 				this.cats.add(cv);
 				this.getChildren().add(cats.size()-2, cv);
 				this.proj.getCategories().add(new Category(newName));
+                this.setMargin(this.getChildren().get(0), new Insets(0, 0, 0, 10));
 			}
 		});
-
-		
 	} 
 	
 	public void addCatView(CategoryView cv) {
