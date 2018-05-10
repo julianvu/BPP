@@ -209,7 +209,7 @@ public class MainScreen extends Application {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (NullPointerException e1) {
-				
+
 			}
 			if (bppFile == null) {
 				//TODO: deal with this idk man
