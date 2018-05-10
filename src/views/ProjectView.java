@@ -71,7 +71,15 @@ public class ProjectView extends HBox {
 			}
 		});
 	} 
-	
+
+	public ArrayList<VBox> getCategories() {
+		return this.cats;
+	}
+
+	public Project getProject() {
+		return this.proj;
+	}
+
 	public void addCatView(CategoryView cv) {
 		this.proj.getCategories().add(cv.getCategory());
 		this.cats.add(cv);

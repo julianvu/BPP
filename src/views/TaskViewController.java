@@ -60,16 +60,13 @@ public class TaskViewController extends GridPane implements Serializable {
         this.add(descPane, 1, 2);
         this.add(datePane, 1, 3);
         //delete button
-        Image deleteImg = new Image(getClass().getResourceAsStream(LOGIN_IMG_URL));
-        ImageView deleteView = new ImageView(deleteImg);
-        deleteView.setFitHeight(BUTTON_SIZE);
-        deleteView.setFitWidth(BUTTON_SIZE);
-        Button deleteButt = new Button("", deleteView);
+        Button deleteButt = new Button("X");
         deleteButt.setTooltip(new Tooltip("Delete this task"));
         this.add(deleteButt, 2, 1);
 
         TextField nameField = new TextField(taskName.getText());
         ColorPicker colorPicker = new ColorPicker(Color.web("ff000000"));
+        System.out.println(colorPicker.getStyleClass());
         System.out.println(colorPicker.getStyleClass().add("button"));
         colorPicker.setStyle(".combo-box .arrow -fx-background-color: transparent;");
         colorPicker.setPrefWidth(30);
@@ -143,7 +140,10 @@ public class TaskViewController extends GridPane implements Serializable {
         });
 
         deleteButt.setOnMouseClicked(e -> {
-            this.getChildren().clear();
+            CategoryView parent = (CategoryView)this.getParent();
+            parent.getTasks().remove(this);
+            parent.getCategory().getTasks().remove(this.getTask());
+            parent.getChildren().remove(this);
         });
     }
 
