@@ -51,7 +51,7 @@ public class ProjectView extends HBox {
 				"-fx-border-radius: 5;\n";
 		addBox.setStyle(addLayout);
 
-		String bgStyle = "-fx-background-image: url(\"background.jpg\");\n" +
+		String bgStyle = "-fx-background-image: url(\"background1.jpg\");\n" +
                 "-fx-background-repeat: no-repeat;\n" +
                 "-fx-background-size: cover";
 		this.setStyle(bgStyle);

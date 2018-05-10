@@ -3,14 +3,9 @@ package views;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -59,10 +54,19 @@ public class TaskViewController extends GridPane implements Serializable {
         this.add(namePane, 1, 1);
         this.add(descPane, 1, 2);
         this.add(datePane, 1, 3);
+
+        // MenuButton
+        MenuItem deleteTaskItem = new MenuItem("Delete");
+        MenuItem moveTaskItem = new MenuItem("Move task");
+        MenuButton menuButton = new MenuButton("•••", null, moveTaskItem, deleteTaskItem);
+        menuButton.getStylesheets().add("stylesheet.css");
+
+        this.add(menuButton, 2, 1);
+
         //delete button
-        Button deleteButt = new Button("X");
-        deleteButt.setTooltip(new Tooltip("Delete this task"));
-        this.add(deleteButt, 2, 1);
+//        Button deleteButt = new Button("X");
+//        deleteButt.setTooltip(new Tooltip("Delete this task"));
+//        this.add(deleteButt, 2, 1);
 
         TextField nameField = new TextField(taskName.getText());
         ColorPicker colorPicker = new ColorPicker(Color.web("ff000000"));
@@ -139,7 +143,7 @@ public class TaskViewController extends GridPane implements Serializable {
             datePane.setOnMouseExited(event1 -> datePane.setBackground(null));
         });
 
-        deleteButt.setOnMouseClicked(e -> {
+        deleteTaskItem.setOnAction(e -> {
             CategoryView parent = (CategoryView)this.getParent();
             parent.getTasks().remove(this);
             parent.getCategory().getTasks().remove(this.getTask());
