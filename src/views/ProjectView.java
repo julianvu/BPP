@@ -46,7 +46,8 @@ public class ProjectView extends HBox {
 		TextInputDialog newCat = new TextInputDialog("Category Name");
 		
 		String addLayout = "-fx-border-color: black;\n" +
-						   "-fx-border-style: dashed;\n";
+						   "-fx-border-style: dashed;\n" +
+				"-fx-border-radius: 5;\n";
 		addBox.setStyle(addLayout);
 
 		String bgStyle = "-fx-background-image: url(\"background.jpg\");\n" +
@@ -64,8 +65,8 @@ public class ProjectView extends HBox {
 				CategoryView cv = new CategoryView(new Category(newName));
 				this.cats.add(cv);
 				this.getChildren().add(cats.size()-2, cv);
+				this.proj.getCategories().add(new Category(newName));
 			}
-			
 		});
 
 		

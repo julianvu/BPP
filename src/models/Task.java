@@ -59,13 +59,10 @@ public class Task implements Serializable {
 
     public int compareTo(Task other) {
 		return this.date.compareTo(other.date);
-    	
-    	/*if(name.toUpperCase().equals(other.name.toUpperCase())) {
-			return 0;
-		}
-		else {
-			return 1;
-		}*/
 	}
+    
+    public String toString() {
+    	return this.name;
+    }
 
 }

@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 import models.*;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -27,6 +28,7 @@ public class MainScreen extends Application {
 	static private final String OPEN_IMG_URL = "/open.png";
 	private static final String SAVE_IMG_URL = "/save.png";
 	private static final String LOGIN_IMG_URL = "/login.png";
+	private BorderPane pane;
 	private Text signInMessage = new Text();
 	private TaskBoard tskbd;
 	
@@ -132,7 +134,7 @@ public class MainScreen extends Application {
 		HBox.setHgrow(buffer, Priority.ALWAYS);
 		ToolBar toolbar = new ToolBar(/*new Label(proj.getName()),*/ buffer, addButt, 
 				openButt, saveButt);
-		BorderPane pane = new BorderPane();
+		pane = new BorderPane();
 		pane.setTop(toolbar);
 		pane.setPrefSize(800, 600);
 		toolbar.setPrefWidth(pane.getPrefWidth());
@@ -168,6 +170,9 @@ public class MainScreen extends Application {
 				in = new ObjectInputStream(new FileInputStream(bppFile));
 				tskbd.setProj((Project)in.readObject()); 
 				in.close();
+				reinit();
+				
+				//System.out.println(tskbd.getProj().getCategories().getTasks());
 			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -195,7 +200,7 @@ public class MainScreen extends Application {
 			ObjectOutputStream out;
 			try {
 				out = new ObjectOutputStream(new FileOutputStream(bppFile));
-				//out.writeObject(PROJECT);
+				out.writeObject(tskbd.getProj());
 				out.close();
 			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
@@ -209,6 +214,9 @@ public class MainScreen extends Application {
 			if (bppFile == null) {
 				//TODO: deal with this idk man
 			}
+			for (Category c:this.tskbd.getProj().getCategories()) {
+				System.out.println(c+": "+c.getTasks());
+			}
 		});
 
 		
@@ -218,6 +226,25 @@ public class MainScreen extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
+	}
+	
+	public void reinit() {
+		pane.getChildren().remove(pane.getCenter());
+		Project proj = tskbd.getProj();
+		ProjectView pv = new ProjectView(proj);
+		pane.setCenter(pv);
+		ArrayList<Category> cat = proj.getCategories();
+		System.out.println(cat);
+		for (Category c:cat) {
+			CategoryView cv = new CategoryView(c);
+			pv.getChildren().add(pv.getChildren().size()-1, cv);
+			System.out.println(c.getName()+": " + c.getTasks());
+			for (Task t:c.getTasks()) {
+				TaskViewController tv = new TaskViewController(t);
+				cv.getChildren().add(tv);
+			}
+		}
+		
 	}
 
     public boolean handleLogin(String username, String password) {

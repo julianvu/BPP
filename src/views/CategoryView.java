@@ -35,6 +35,10 @@ public class CategoryView extends VBox {
                 "-fx-background-radius: 5;\n");
 
 		this.cat = cat;
+		for (Task t:cat.getTasks()) {
+			TaskViewController tv = new TaskViewController(t);
+			this.tasks.add(tv);
+		}
 		this.setSpacing(10);
 		Image editImg = new Image(getClass().getResourceAsStream(EDIT_IMG_URL));
 		ImageView editView = new ImageView(editImg);
@@ -164,7 +168,9 @@ public class CategoryView extends VBox {
 				//Save or something or another
 //            this.tasks.add(taskvc);
 
-				this.getChildren().addAll(taskvc);
+				this.getChildren().add(taskvc);
+				this.cat.addTask(task);
+				System.out.println(this.cat.getTasks());
 
                 taskvc.setOnDragDetected(event -> {
                     Dragboard db = this.startDragAndDrop(TransferMode.ANY);
@@ -187,4 +193,9 @@ public class CategoryView extends VBox {
 	public Category getCategory() {
 		return this.cat;
 	}
+	
+	public void setAllTasks(ArrayList<Task> tasks) {
+		
+	}
+
 }
