@@ -1,3 +1,12 @@
 .menu-button > .arrow-button, .menu-button > .arrow-button > .arrow {
     -fx-padding: 0;
 }
+
+.menu-button {
+    -fx-background-color: null;
+    -fx-background-radius: 5;
+}
+
+.menu-button:hover {
+    -fx-background-color: rgba(169, 169, 169, 0.5);
+}

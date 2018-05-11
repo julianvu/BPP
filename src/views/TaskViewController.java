@@ -1,5 +1,6 @@
 package views;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,10 +12,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import models.Task;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class TaskViewController extends GridPane implements Serializable {
 
@@ -58,7 +62,11 @@ public class TaskViewController extends GridPane implements Serializable {
         // MenuButton
         MenuItem deleteTaskItem = new MenuItem("Delete");
         MenuItem moveTaskItem = new MenuItem("Move task");
-        MenuButton menuButton = new MenuButton("•••", null, moveTaskItem, deleteTaskItem);
+        Image ellipsisImage = new Image(getClass().getResourceAsStream("/dotdotdot.png"));
+        ImageView ellipsis = new ImageView(ellipsisImage);
+        ellipsis.setFitWidth(25);
+        ellipsis.setFitHeight(25);
+        MenuButton menuButton = new MenuButton(null, ellipsis, moveTaskItem, deleteTaskItem);
         menuButton.getStylesheets().add("stylesheet.css");
 
         this.add(menuButton, 2, 1);
@@ -143,11 +151,37 @@ public class TaskViewController extends GridPane implements Serializable {
             datePane.setOnMouseExited(event1 -> datePane.setBackground(null));
         });
 
-        deleteTaskItem.setOnAction(e -> {
-            CategoryView parent = (CategoryView)this.getParent();
-            parent.getTasks().remove(this);
-            parent.getCategory().getTasks().remove(this.getTask());
-            parent.getChildren().remove(this);
+        deleteTaskItem.setOnAction(e -> deleteTask());
+
+        moveTaskItem.setOnAction(event -> {
+            ProjectView grandparent = (ProjectView)this.getParent().getParent();
+            ArrayList<VBox> categories = grandparent.getCategories();
+
+            final Stage dialog = new Stage();
+            dialog.setTitle("Choose a category");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
+            ListView listView = new ListView();
+            for (VBox v : grandparent.getCategories()) {
+                if (v instanceof CategoryView) {
+                    listView.getItems().add(((CategoryView)v).getCategory().getName());
+                }
+            }
+
+            VBox dialogVbox = new VBox(listView);
+            Scene dialogScene = new Scene(dialogVbox, 300, 200);
+            dialog.setScene(dialogScene);
+            dialog.show();
+
+            listView.setOnMouseClicked(event1 -> {
+                String selected = (String)listView.getSelectionModel().getSelectedItem();
+                int indexOfCategory = grandparent.findCategoryView(selected);
+                CategoryView selectedCategory = (CategoryView)grandparent.getCategories().get(indexOfCategory);
+                if (selected != null) {
+                    moveTask(selectedCategory);
+                    dialog.close();
+                }
+            });
         });
     }
 
@@ -177,6 +211,20 @@ public class TaskViewController extends GridPane implements Serializable {
         toReturn.setPadding(new Insets(10));
         toReturn.setAlignment(Pos.CENTER_LEFT);
         return toReturn;
+    }
+
+    private void deleteTask() {
+        CategoryView parent = (CategoryView)this.getParent();
+        parent.getTasks().remove(this);
+        parent.getCategory().getTasks().remove(this.getTask());
+        parent.getChildren().remove(this);
+    }
+
+    private void moveTask(CategoryView otherCategory) {
+        deleteTask();
+        otherCategory.getTasks().add(this);
+        otherCategory.getCategory().getTasks().add(this.getTask());
+        otherCategory.getChildren().add(this);
     }
 
     private String getDate(Task task) {

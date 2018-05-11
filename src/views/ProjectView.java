@@ -80,6 +80,15 @@ public class ProjectView extends HBox {
 		return this.proj;
 	}
 
+	public int findCategoryView(String categoryName) {
+	    for (int i = 0; i < cats.size(); i++) {
+	        if (cats.get(i) instanceof CategoryView && ((CategoryView)(cats.get(i))).getCategory().getName().equals(categoryName)) {
+	            return i;
+            }
+        }
+        return -1;
+    }
+
 	public void addCatView(CategoryView cv) {
 		this.proj.getCategories().add(cv.getCategory());
 		this.cats.add(cv);

@@ -74,7 +74,11 @@ public class CategoryView extends VBox {
         MenuItem moveTaskItem = new MenuItem("Move a task ...");
         MenuItem renameCategoryItem = new MenuItem("Rename category");
         MenuItem deleteCategoryItem = new MenuItem("Delete category");
-        MenuButton menuButton = new MenuButton("•••", null, newTaskItem, moveTaskItem, renameCategoryItem, deleteCategoryItem);
+        Image ellipsisImage = new Image(getClass().getResourceAsStream("/dotdotdot.png"));
+        ImageView ellipsis = new ImageView(ellipsisImage);
+        ellipsis.setFitHeight(25);
+        ellipsis.setFitWidth(25);
+        MenuButton menuButton = new MenuButton(null, ellipsis, newTaskItem, moveTaskItem, renameCategoryItem, deleteCategoryItem);
         String menuStyle = this.getStyle();
         System.out.println(menuStyle);
         menuButton.getStylesheets().add("stylesheet.css");
