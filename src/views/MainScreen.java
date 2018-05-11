@@ -244,7 +244,6 @@ public class MainScreen extends Application {
 				cv.getChildren().add(tv);
 			}
 		}
-		
 	}
 
     public boolean handleLogin(String username, String password) {
