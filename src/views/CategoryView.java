@@ -136,7 +136,7 @@ public class CategoryView extends VBox {
 		});
 
 		deleteCategoryItem.setOnAction(event -> {
-
+			deleteCategory();
 		});
 
 		newTaskItem.setOnAction(e -> {
