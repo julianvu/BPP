@@ -19,6 +19,7 @@ import models.Task;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class TaskViewController extends GridPane implements Serializable {
 
@@ -140,8 +141,12 @@ public class TaskViewController extends GridPane implements Serializable {
             dp.setOnAction(event1 -> {
                 this.task.setDate(dp.getValue());
                 taskDueDate.setText("Due date: " + getDate(this.task));
+                CategoryView cv = (CategoryView) this.getParent();
+                Collections.sort(cv.getTasks(), new TaskViewComparator());
                 this.getChildren().remove(dp);
                 this.add(datePane, 1, 3);
+                cv.getChildren().remove(1, cv.getChildren().size());
+                cv.getChildren().addAll(cv.getTasks());
             });
         });
 

@@ -218,7 +218,6 @@ public class MainScreen extends Application {
 				System.out.println(c+": "+c.getTasks());
 			}
 		});
-
 		
 		Scene scene = new Scene(pane, 800, 600);
 		primaryStage.getIcons().add(new Image("/icon.png"));
