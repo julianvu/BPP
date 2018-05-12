@@ -19,6 +19,7 @@ public class ProjectView extends HBox {
 	private static final String ADD_IMG_URL = "/add.png";
 	private Project proj; 
 	private ArrayList<VBox> cats;
+	private static final String LOGIN_IMG_URL = "/login.png";
 
 	public ProjectView(Project proj) { 
 		super(10.0);
@@ -59,6 +60,17 @@ public class ProjectView extends HBox {
 		//String catLayout = "-fx-border-color: black;\n" +
 			//			   ""
 		
+		
+		Image bgImg = new Image(getClass().getResourceAsStream(LOGIN_IMG_URL));
+		ImageView bgView = new ImageView(bgImg);
+		bgView.setFitHeight(BUTTON_SIZE);
+		bgView.setFitWidth(BUTTON_SIZE);
+		Button bgButt = new Button("", bgView);
+		bgButt.setTooltip(new Tooltip("Change Background"));
+		
+		this.getChildren().add(bgButt);
+		
+		
 		addButt.setOnAction(e -> {
 			Optional<String> result = newCat.showAndWait();
 			if (result.isPresent()) {
@@ -70,6 +82,30 @@ public class ProjectView extends HBox {
                 this.setMargin(this.getChildren().get(0), new Insets(0, 0, 0, 10));
 			}
 		});
+		
+		bgButt.setOnMouseClicked(e -> { 
+			//opens a new window (gridpane) where you can pick different bgs
+			BackgroundPicker picker = new BackgroundPicker();
+			int bg = picker.display();
+			System.out.print(Integer.toString(bg));
+			switch (bg) {
+				case 1: setBG(bg);
+						break;
+				case 2: setBG(bg); 
+						break;
+				case 3: setBG(bg);
+						break;
+				case 4: setBG(bg);
+						break;
+				case 5: setBG(bg);
+						break;
+				case 6: setBG(bg); 
+						break;
+				default: 
+			}
+			
+		});
+		
 	} 
 
 	public ArrayList<VBox> getCategories() {
@@ -93,4 +129,12 @@ public class ProjectView extends HBox {
 		this.proj.getCategories().add(cv.getCategory());
 		this.cats.add(cv);
 	}
+	
+	public void setBG(int bg) {
+		String bgStyle = "-fx-background-image: url(\"background" + bg + ".jpg" + "\");\n" +
+				"-fx-background-repeat: no-repeat;\n" +
+				"-fx-background-size: cover";
+		this.setStyle(bgStyle);		
+	}
+
 } 
