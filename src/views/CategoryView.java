@@ -16,7 +16,9 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import models.Category;
+import models.Project;
 import models.Task;
 import models.TaskModelComparator;
 
@@ -63,71 +65,78 @@ public class CategoryView extends VBox {
 		HBox buffer = new HBox();
 		HBox.setHgrow(buffer, Priority.ALWAYS);
 
-		//adding delete button
-		Image deleteImg = new Image(getClass().getResourceAsStream(LOGIN_IMG_URL));
-		ImageView deleteView = new ImageView(deleteImg);
-		deleteView.setFitHeight(BUTTON_SIZE);
-		deleteView.setFitWidth(BUTTON_SIZE);
-		Button deleteButt = new Button("", deleteView);
-		deleteButt.setTooltip(new Tooltip("Delete this category"));
+		// Category's move buttons
+		Image leftArrowImage = new Image(getClass().getResourceAsStream("/arrow-left.gif"));
+		Image rightArrowImage = new Image(getClass().getResourceAsStream("/arrow-right.gif"));
+		ImageView leftArrow = new ImageView(leftArrowImage);
+		leftArrow.setFitHeight(15);
+		leftArrow.setFitWidth(15);
+		ImageView rightArrow  = new ImageView(rightArrowImage);
+		rightArrow.setFitHeight(15);
+		rightArrow.setFitWidth(15);
+		Button moveLeft = new Button(null, leftArrow);
+		moveLeft.setBackground(null);
+		moveLeft.setTooltip(new Tooltip("Move category to the left"));
+		Button moveRight = new Button(null, rightArrow);
+		moveRight.setBackground(null);
+		moveRight.setTooltip(new Tooltip("Move category to the right"));
 
+
+        moveLeft.setOnMouseEntered(event -> {
+            moveLeft.setBackground(new Background(new BackgroundFill(Color.GAINSBORO, new CornerRadii(5), null)));
+            moveLeft.setOnAction(event1 -> moveCategoryLeft());
+
+            moveLeft.setOnMouseExited(event1 -> moveLeft.setBackground(null));
+        });
+        moveRight.setOnMouseEntered(event -> {
+
+            moveRight.setBackground(new Background(new BackgroundFill(Color.GAINSBORO, new CornerRadii(5), null)));
+            moveRight.setOnAction(event1 -> moveCategoryRight());
+            moveRight.setOnMouseExited(event1 -> moveRight.setBackground(null));
+        });
+
+		// Drop-down menu for creating task, renaming category, deleting category
         MenuItem newTaskItem = new MenuItem("Create new task");
-        MenuItem moveTaskItem = new MenuItem("Move a task ...");
         MenuItem renameCategoryItem = new MenuItem("Rename category");
         MenuItem deleteCategoryItem = new MenuItem("Delete category");
         Image ellipsisImage = new Image(getClass().getResourceAsStream("/dotdotdot.png"));
         ImageView ellipsis = new ImageView(ellipsisImage);
         ellipsis.setFitHeight(25);
         ellipsis.setFitWidth(25);
-        MenuButton menuButton = new MenuButton(null, ellipsis, newTaskItem, moveTaskItem, renameCategoryItem, deleteCategoryItem);
+        MenuButton menuButton = new MenuButton(null, ellipsis, newTaskItem, renameCategoryItem, deleteCategoryItem);
         String menuStyle = this.getStyle();
-        System.out.println(menuStyle);
         menuButton.getStylesheets().add("stylesheet.css");
-        System.out.println(menuButton.getStyle());
 
-
-		ToolBar toolbar = new ToolBar(nameLabel, buffer, menuButton);
+		ToolBar toolbar = new ToolBar(moveLeft, nameLabel, buffer, menuButton, moveRight);
 		toolbar.setStyle("-fx-background-radius: 5;\n");
 		TextField nameInput = new TextField(cat.getName());
 
 		renameCategoryItem.setOnAction(event -> {
-			toolbar.getItems().removeAll(nameLabel, buffer, menuButton);
+			toolbar.getItems().removeAll(moveLeft, nameLabel, buffer, menuButton, moveRight);
 			toolbar.getItems().add(nameInput);
 
 			nameInput.setOnAction(e2 -> {
 				cat.setName(nameInput.getText());
 				toolbar.getItems().remove(nameInput);
 				nameLabel.setText(cat.getName());
-				toolbar.getItems().addAll(nameLabel, buffer, menuButton);
+				toolbar.getItems().addAll(moveLeft, nameLabel, buffer, menuButton, moveRight);
 			});
 		});
 
 		nameLabel.setOnMouseClicked(e -> {
-			toolbar.getItems().removeAll(nameLabel, buffer, menuButton);
-			toolbar.getItems().add(nameInput);
+            toolbar.getItems().removeAll(moveLeft, nameLabel, buffer, menuButton, moveRight);
+            toolbar.getItems().add(nameInput);
 
-			nameInput.setOnAction(e2 -> {
-				cat.setName(nameInput.getText());
-				toolbar.getItems().remove(nameInput);
-				nameLabel.setText(cat.getName());
-				toolbar.getItems().addAll(nameLabel, buffer, menuButton);
-			});
+            nameInput.setOnAction(e2 -> {
+                cat.setName(nameInput.getText());
+                toolbar.getItems().remove(nameInput);
+                nameLabel.setText(cat.getName());
+                toolbar.getItems().addAll(moveLeft, nameLabel, buffer, menuButton, moveRight);
+            });
 		});
 
 		deleteCategoryItem.setOnAction(event -> {
-			ProjectView parent = (ProjectView) this.getParent();
-			parent.getCategories().remove(this);
-			parent.getProject().getCategories().remove(this.getCategory());
-			parent.getChildren().remove(this);
-		});
 
-		moveTaskItem.setOnAction(event -> {
-			MenuButton taskListMenu = new MenuButton();
-			for (int i = 0; i < tasks.size(); i++) {
-				taskListMenu.getItems().add(new MenuItem(tasks.get(i).getTask().getName()));
-			}
-			toolbar.getItems().remove(menuButton);
-			toolbar.getItems().add(taskListMenu);
 		});
 
 		newTaskItem.setOnAction(e -> {
@@ -254,6 +263,44 @@ public class CategoryView extends VBox {
 			this.tasks.add(tv);
 		}
 	}
+
+	private void deleteCategory() {
+        ProjectView parent = (ProjectView) this.getParent();
+        parent.getCategories().remove(this);
+        parent.getProject().getCategories().remove(this.getCategory());
+        parent.getChildren().remove(this);
+    }
+
+    private void moveCategoryLeft() {
+        ProjectView parent = (ProjectView) this.getParent();
+        int indexOfThis = parent.getChildren().indexOf(this);
+        if (indexOfThis != 0) {
+            int indexOfDestination = indexOfThis - 1;
+            CategoryView temp = (CategoryView)parent.getChildren().get(indexOfDestination);
+            parent.getChildren().set(indexOfDestination, new CategoryView(new Category("dummy")));
+            parent.getChildren().set(indexOfThis, temp);
+            parent.getChildren().set(indexOfDestination, this);
+        }
+    }
+
+    private void moveCategoryRight() {
+        ProjectView parent = (ProjectView) this.getParent();
+        int indexOfThis = parent.getChildren().indexOf(this);
+        int indexOfDestination = indexOfThis + 1;
+        while (indexOfThis != parent.getChildren().size() - 1) {
+            if (parent.getChildren().get(indexOfDestination) instanceof CategoryView) {
+                CategoryView temp = (CategoryView) parent.getChildren().get(indexOfDestination);
+                parent.getChildren().set(indexOfDestination, new CategoryView(new Category("dummy")));
+                parent.getChildren().set(indexOfThis, temp);
+                parent.getChildren().set(indexOfDestination, this);
+                break;
+            }
+            else {
+                break;
+            }
+        }
+    }
+
 	ArrayList<TaskViewController> getTasks() {
 		return tasks;
 	}

@@ -43,7 +43,7 @@ public class ProjectView extends HBox {
 		addBox.getChildren().add(addButt);
 		this.cats.add(addBox);
 		this.getChildren().add(addBox);
-		
+
 		TextInputDialog newCat = new TextInputDialog("Category Name");
 		
 		String addLayout = "-fx-border-color: black;\n" +
