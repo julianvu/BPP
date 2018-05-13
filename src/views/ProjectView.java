@@ -78,7 +78,7 @@ public class ProjectView extends HBox {
 				CategoryView cv = new CategoryView(new Category(newName));
 				this.cats.add(cv);
 				this.getChildren().add(cats.size()-2, cv);
-				this.proj.getCategories().add(new Category(newName));
+				this.proj.getCategories().add(cv.getCategory());
                 this.setMargin(this.getChildren().get(0), new Insets(0, 0, 0, 10));
 			}
 		});

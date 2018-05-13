@@ -46,7 +46,8 @@ public class CategoryView extends VBox {
 		this.cat = cat;
 		this.tasks = new ArrayList<>();
 		this.setAllTasks(cat.getTasks());
-		this.getChildren().addAll(tasks);
+		
+		//this.getChildren().addAll(tasks);
 		this.setSpacing(10);
 		Image editImg = new Image(getClass().getResourceAsStream(EDIT_IMG_URL));
 		ImageView editView = new ImageView(editImg);
@@ -258,7 +259,7 @@ public class CategoryView extends VBox {
 	}
 
 	public void setAllTasks(ArrayList<Task> tasks) {
-		for (Task t:cat.getTasks()) {
+		for (Task t:tasks) {
 			TaskViewController tv = new TaskViewController(t);
 			this.tasks.add(tv);
 		}

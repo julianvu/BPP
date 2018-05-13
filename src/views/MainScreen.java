@@ -168,10 +168,10 @@ public class MainScreen extends Application {
 			ObjectInputStream in;
 			try {
 				in = new ObjectInputStream(new FileInputStream(bppFile));
-				tskbd.setProj((Project)in.readObject()); 
+				Project savedProj = (Project) in.readObject();
+				tskbd.setProj(savedProj);				
 				in.close();
 				reinit();
-				
 				//System.out.println(tskbd.getProj().getCategories().getTasks());
 			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
@@ -201,6 +201,7 @@ public class MainScreen extends Application {
 			try {
 				out = new ObjectOutputStream(new FileOutputStream(bppFile));
 				out.writeObject(tskbd.getProj());
+				out.flush();
 				out.close();
 			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
@@ -211,12 +212,7 @@ public class MainScreen extends Application {
 			} catch (NullPointerException e1) {
 
 			}
-			if (bppFile == null) {
-				//TODO: deal with this idk man
-			}
-			for (Category c:this.tskbd.getProj().getCategories()) {
-				System.out.println(c+": "+c.getTasks());
-			}
+			
 		});
 		
 		Scene scene = new Scene(pane, 800, 600);
@@ -236,12 +232,8 @@ public class MainScreen extends Application {
 		System.out.println(cat);
 		for (Category c:cat) {
 			CategoryView cv = new CategoryView(c);
-			pv.getChildren().add(pv.getChildren().size()-1, cv);
-			System.out.println(c.getName()+": " + c.getTasks());
-			for (Task t:c.getTasks()) {
-				TaskViewController tv = new TaskViewController(t);
-				cv.getChildren().add(tv);
-			}
+			pv.getChildren().add(pv.getChildren().size()-2, cv);
+			cv.setAllTasks(c.getTasks());
 		}
 	}
 

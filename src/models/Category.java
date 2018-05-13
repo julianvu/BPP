@@ -31,4 +31,9 @@ public class Category implements Serializable{
 		return this.tasks;
 	}
 
+	public void setTasks(ArrayList<Task> newTasks) {
+		// TODO Auto-generated method stub
+		this.tasks = newTasks;
+	}
+
 }
