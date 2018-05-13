@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.effect.BlendMode;
@@ -17,6 +18,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import models.Category;
 import models.Project;
 import models.Task;
@@ -250,8 +252,31 @@ public class CategoryView extends VBox {
 		for (TaskViewController tv:tasks) {
 			this.getChildren().add(tasks.indexOf(tv) + 1, tv);
 		}
-		//TODO: change taskvc to nodes (panes?) so i can use this
-		//this.getChildren().addAll(tasks);
+
+		Text quickAddText = new Text("Quick-add a task...");
+		quickAddText.setWrappingWidth(150);
+		StackPane quickAddPane = new StackPane(quickAddText);
+		quickAddPane.setPadding(new Insets(10));
+		quickAddPane.setAlignment(Pos.CENTER_LEFT);
+		this.getChildren().add(quickAddPane);
+
+		quickAddPane.setOnMouseEntered(event -> {
+			quickAddPane.setBackground(new Background(new BackgroundFill(Color.GAINSBORO, new CornerRadii(5), null)));
+			quickAddPane.setOnMouseExited(event1 -> quickAddPane.setBackground(null));
+		});
+
+		TextField quickAddField = new TextField();
+		quickAddPane.setOnMouseClicked(event -> {
+			this.getChildren().remove(quickAddPane);
+			this.getChildren().add(quickAddField);
+			quickAddField.requestFocus();
+		});
+		quickAddField.setOnAction(event -> {
+			this.getChildren().remove(quickAddField);
+			Task quickAddTask = new Task(quickAddField.getText(), null, null);
+			TaskViewController quickAddTaskVC = new TaskViewController(quickAddTask);
+			this.getChildren().addAll(quickAddTaskVC, quickAddPane);
+		});
 	}
 
 	public Category getCategory() {

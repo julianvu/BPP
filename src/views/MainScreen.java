@@ -239,9 +239,7 @@ public class MainScreen extends Application {
 
     public boolean handleLogin(String username, String password) {
         try {
-            File file = new File("accounts.txt");
-            FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
+            BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/accounts.txt")));
             String line1 = null;
             String line2 = null;
 

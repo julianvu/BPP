@@ -9,14 +9,14 @@ public class Task implements Serializable {
 	private LocalDate date;
 	
 	public Task(String name, String description, LocalDate date) {
-		if(name.equals(null)) {
+		if(name == null) {
 			this.name = "";
 		}
 		else {
 			this.name = name;
 		}
 		
-		if(description.equals(null)) {
+		if(description == null) {
 			this.description = "";
 		}
 		else {
