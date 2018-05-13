@@ -47,7 +47,6 @@ public class CategoryView extends VBox {
 		this.tasks = new ArrayList<>();
 		this.setAllTasks(cat.getTasks());
 		
-		//this.getChildren().addAll(tasks);
 		this.setSpacing(10);
 		Image editImg = new Image(getClass().getResourceAsStream(EDIT_IMG_URL));
 		ImageView editView = new ImageView(editImg);
@@ -209,8 +208,6 @@ public class CategoryView extends VBox {
 				this.getChildren().add(tasks.indexOf(taskvc) + 1, taskvc);
 
 				this.cat.addTask(task);
-				Collections.sort(cat.getTasks(), new TaskModelComparator());
-				System.out.println(this.cat.getTasks());
 				// DRAG-AND-DROP WIP
 				//                DataFormat taskDataFormat = new DataFormat("Task");
 				//                taskvc.setOnDragDetected(event -> {
@@ -250,6 +247,9 @@ public class CategoryView extends VBox {
 		//this.setMinSize(200, 100);
 		this.setMaxHeight(100);
 		this.getChildren().add(toolbar);
+		for (TaskViewController tv:tasks) {
+			this.getChildren().add(tasks.indexOf(tv) + 1, tv);
+		}
 		//TODO: change taskvc to nodes (panes?) so i can use this
 		//this.getChildren().addAll(tasks);
 	}
