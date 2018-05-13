@@ -275,6 +275,8 @@ public class CategoryView extends VBox {
 			this.getChildren().remove(quickAddField);
 			Task quickAddTask = new Task(quickAddField.getText(), null, null);
 			TaskViewController quickAddTaskVC = new TaskViewController(quickAddTask);
+			tasks.add(quickAddTaskVC);
+			cat.addTask(quickAddTaskVC.getTask());
 			this.getChildren().addAll(quickAddTaskVC, quickAddPane);
 		});
 	}
