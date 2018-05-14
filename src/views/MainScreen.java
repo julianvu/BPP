@@ -192,10 +192,12 @@ public class MainScreen extends Application {
 			fc.setTitle("Save B++ file");
 			fc.getExtensionFilters().add(
 					new ExtensionFilter("B++ file", "*.bpp"));
-			File bppFile = fc.showSaveDialog(primaryStage);
+			if (tskbd.getProj().getFile() == null) {
+				tskbd.getProj().setFile(fc.showSaveDialog(primaryStage));
+			}	
 			ObjectOutputStream out;
 			try {
-				out = new ObjectOutputStream(new FileOutputStream(bppFile));
+				out = new ObjectOutputStream(new FileOutputStream(tskbd.getProj().getFile()));
 				out.writeObject(tskbd.getProj());
 				out.flush();
 				out.close();

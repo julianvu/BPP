@@ -8,6 +8,7 @@ import views.CategoryView;
 public class Project implements Serializable{ //TODO: whats serialization 
 	private ArrayList<Category> categories; 
 	private String name; 
+	private File bppfile;
 	//private ArrayList<String> users; 
 
 	public Project(String name) { 
@@ -20,4 +21,15 @@ public class Project implements Serializable{ //TODO: whats serialization
 	}
 
 	public String getName() { return this.name; }
+
+	public File getFile() {
+		// TODO Auto-generated method stub
+		return bppfile;
+	}
+
+	public void setFile(File saveToThis) {
+		// TODO Auto-generated method stub
+		bppfile = saveToThis;
+		
+	}
 } 
