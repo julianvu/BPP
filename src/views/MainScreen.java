@@ -31,6 +31,8 @@ public class MainScreen extends Application {
 	private BorderPane pane;
 	private Text signInMessage = new Text();
 	private TaskBoard tskbd;
+	private Label nameLabel;
+	private ToolBar toolbar;
 	
 	public MainScreen() {
 		this.tskbd = new TaskBoard();
@@ -130,14 +132,20 @@ public class MainScreen extends Application {
 		saveButt.setTooltip(new Tooltip("Save project"));
 
 		//toolbar
+		nameLabel = new Label();
 		HBox buffer = new HBox();
 		HBox.setHgrow(buffer, Priority.ALWAYS);
-		ToolBar toolbar = new ToolBar(/*new Label(proj.getName()),*/ buffer, addButt, 
+		toolbar = new ToolBar(buffer, addButt, 
 				openButt, saveButt);
 		pane = new BorderPane();
 		pane.setTop(toolbar);
 		pane.setPrefSize(800, 600);
 		toolbar.setPrefWidth(pane.getPrefWidth());
+		
+		Label mainTxt = new Label("Create a new project or load an existing project");
+		mainTxt.setStyle("-fx-font-size: 36px;\n" +
+						 "-fx-text-fill: darkslategray;\n");
+		pane.setCenter(mainTxt);
 		
 		addButt.setOnAction(e -> {
             TextInputDialog createProjDialog = new TextInputDialog("Project");
@@ -152,11 +160,11 @@ public class MainScreen extends Application {
                 this.tskbd.setProj(project);
                 pane.setCenter(projectView);
             }  
-            Label label = new Label("Project - " + tskbd.getProj().getName());
+            nameLabel.setText("Project - " + tskbd.getProj().getName());
             if (toolbar.getItems().get(0) instanceof Label) {
             	toolbar.getItems().remove(0);
             }
-            toolbar.getItems().add(0, label);
+            toolbar.getItems().add(0, nameLabel);
 		});
 
 		FileChooser fc = new FileChooser();
@@ -224,6 +232,11 @@ public class MainScreen extends Application {
 	public void reinit() {
 		pane.getChildren().remove(pane.getCenter());
 		Project proj = tskbd.getProj();
+		nameLabel.setText("Project - " + tskbd.getProj().getName());
+		if (toolbar.getItems().get(0) instanceof Label) {
+        	toolbar.getItems().remove(0);
+        }
+        toolbar.getItems().add(0, nameLabel);
 		ProjectView pv = new ProjectView(proj);
 		pane.setCenter(pv);
 		ArrayList<Category> cat = proj.getCategories();
