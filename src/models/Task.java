@@ -7,6 +7,10 @@ public class Task implements Serializable {
 	private String name;
 	private String description;
 	private LocalDate date;
+	private double colorR;
+	private double colorG;
+	private double colorB;
+	private double colorO;
 	
 	public Task(String name, String description, LocalDate date) {
 		if(name == null) {
@@ -64,5 +68,53 @@ public class Task implements Serializable {
     public String toString() {
     	return this.name;
     }
+
+
+
+	public double getColorR() {
+		return colorR;
+	}
+
+
+
+	public void setColorR(double colorR) {
+		this.colorR = colorR;
+	}
+
+
+
+	public double getColorG() {
+		return colorG;
+	}
+
+
+
+	public void setColorG(double colorG) {
+		this.colorG = colorG;
+	}
+
+
+
+	public double getColorB() {
+		return colorB;
+	}
+
+
+
+	public void setColorB(double colorB) {
+		this.colorB = colorB;
+	}
+
+
+
+	public double getColorO() {
+		return colorO;
+	}
+
+
+
+	public void setColorO(double colorO) {
+		this.colorO = colorO;
+	}
 
 }

@@ -42,6 +42,9 @@ public class TaskViewController extends GridPane implements Serializable {
         // Wrap Text in StackPanes
         StackPane namePane = wrapText(taskName);
         namePane.setPadding(new Insets(2));
+        this.setTaskColor();
+        namePane.setBackground(new Background(new BackgroundFill(taskColor, new CornerRadii(25), null)));
+        
         StackPane descPane = wrapText(taskDesc);
         StackPane datePane = wrapText(taskDueDate);
 
@@ -72,11 +75,6 @@ public class TaskViewController extends GridPane implements Serializable {
 
         this.add(menuButton, 2, 1);
 
-        //delete button
-//        Button deleteButt = new Button("X");
-//        deleteButt.setTooltip(new Tooltip("Delete this task"));
-//        this.add(deleteButt, 2, 1);
-
         TextField nameField = new TextField(taskName.getText());
         ColorPicker colorPicker = new ColorPicker(Color.web("ff000000"));
         System.out.println(colorPicker.getStyleClass());
@@ -95,6 +93,10 @@ public class TaskViewController extends GridPane implements Serializable {
                 this.task.setName(newName);
                 taskName.setText(newName);
                 taskColor = colorPicker.getValue();
+                this.task.setColorR(taskColor.getRed());
+                this.task.setColorG(taskColor.getGreen());
+                this.task.setColorB(taskColor.getBlue());
+                this.task.setColorO(taskColor.getOpacity());
                 namePane.setBackground(new Background(new BackgroundFill(taskColor, new CornerRadii(25), null)));
                 this.getChildren().removeAll(nameField, colorPicker);
                 this.add(namePane, 1, 1); //}
@@ -208,6 +210,10 @@ public class TaskViewController extends GridPane implements Serializable {
 
     public Color getTaskColor() {
         return taskColor;
+    }
+    
+    public void setTaskColor() {
+    	this.taskColor = new Color(task.getColorR(), task.getColorG(), task.getColorB(), task.getColorO());
     }
 
     private StackPane wrapText(Text text){

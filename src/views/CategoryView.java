@@ -292,6 +292,7 @@ public class CategoryView extends VBox {
 	public void setAllTasks(ArrayList<Task> tasks) {
 		for (Task t:tasks) {
 			TaskViewController tv = new TaskViewController(t);
+			tv.setTaskColor();
 			this.tasks.add(tv);
 		}
 	}
