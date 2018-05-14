@@ -185,8 +185,6 @@ public class MainScreen extends Application {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			
-
 			if (bppFile == null) {
 				//TODO: deal with this idk man
 			}
@@ -232,7 +230,7 @@ public class MainScreen extends Application {
 		System.out.println(cat);
 		for (Category c:cat) {
 			CategoryView cv = new CategoryView(c);
-			pv.getChildren().add(pv.getChildren().size()-2, cv);
+			pv.getChildren().add(pv.getChildren().size()-3, cv);
 			cv.setAllTasks(c.getTasks());
 		}
 	}
