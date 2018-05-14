@@ -41,8 +41,6 @@ public class ProjectView extends HBox {
 		addButt.setTooltip(new Tooltip("Create new category"));
 		addBox.setAlignment(Pos.CENTER);
 		
-//		addButt.setLayoutX((addBox.getPrefWidth()-BUTTON_SIZE)/2);
-//		addButt.setLayoutY(200);
 		addBox.getChildren().add(addButt);
 		this.cats.add(addBox);
 
@@ -59,9 +57,7 @@ public class ProjectView extends HBox {
                 "-fx-background-repeat: no-repeat;\n" +
                 "-fx-background-size: cover";
 		this.setStyle(bgStyle);
-
-		//String catLayout = "-fx-border-color: black;\n" +
-			//			   ""
+		
 		HBox buffer = new HBox();
 		HBox.setHgrow(buffer, Priority.ALWAYS);
 		

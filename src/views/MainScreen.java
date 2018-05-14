@@ -17,17 +17,18 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import models.*;
-
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MainScreen extends Application {
-	static private final int BUTTON_SIZE = 12;
-	static private final String ADD_IMG_URL = "/add.png";
-	static private final String OPEN_IMG_URL = "/open.png";
-	private static final String SAVE_IMG_URL = "/save.png";
-	private static final String LOGIN_IMG_URL = "/login.png";
+	//kept these public so other classes could reference it
+	static public final int BUTTON_SIZE = 12;
+	static public final String ADD_IMG_URL = "/add.png";
+	static public final String OPEN_IMG_URL = "/open.png";
+	static public final String SAVE_IMG_URL = "/save.png";
+	static public final String LOGIN_IMG_URL = "/login.png";
+	
 	private BorderPane pane;
 	private Text signInMessage = new Text();
 	private TaskBoard tskbd;
@@ -110,25 +111,14 @@ public class MainScreen extends Application {
         }
 
         //buttons
-		Image addImg = new Image(getClass().getResourceAsStream(ADD_IMG_URL));
-		ImageView addView = new ImageView(addImg);
-		addView.setFitHeight(BUTTON_SIZE);
-		addView.setFitWidth(BUTTON_SIZE);
-		Button addButt = new Button("", addView);
+		Button addButt = buttonFromPic(ADD_IMG_URL);
 		addButt.setTooltip(new Tooltip("Create new project"));
 
-		Image openImg = new Image(getClass().getResourceAsStream(OPEN_IMG_URL));
-		ImageView openView = new ImageView(openImg);
-		openView.setFitHeight(BUTTON_SIZE);
-		openView.setFitWidth(BUTTON_SIZE);
-		Button openButt = new Button("", openView);
+		
+		Button openButt = buttonFromPic(OPEN_IMG_URL);
 		openButt.setTooltip(new Tooltip("Open project"));
 
-		Image saveImg = new Image(getClass().getResourceAsStream(SAVE_IMG_URL));
-		ImageView saveView = new ImageView(saveImg);
-		saveView.setFitHeight(BUTTON_SIZE);
-		saveView.setFitWidth(BUTTON_SIZE);
-		Button saveButt = new Button("", saveView);
+		Button saveButt = buttonFromPic(SAVE_IMG_URL);
 		saveButt.setTooltip(new Tooltip("Save project"));
 
 		//toolbar
@@ -274,5 +264,13 @@ public class MainScreen extends Application {
             System.out.println("Could not read from file.");
         }
         return false;
+    }
+    
+    public Button buttonFromPic(String imgURL) {
+    	Image img = new Image(getClass().getResourceAsStream(imgURL));
+		ImageView imgView = new ImageView(img);
+		imgView.setFitHeight(BUTTON_SIZE);
+		imgView.setFitWidth(BUTTON_SIZE);
+		return new Button("", imgView);
     }
 }

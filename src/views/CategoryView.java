@@ -1,42 +1,25 @@
 package views;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import models.Category;
-import models.Project;
 import models.Task;
-import models.TaskModelComparator;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
-//TODO: an add task button?
 
 public class CategoryView extends VBox {
 	private ArrayList<TaskViewController> tasks;
 	private Category cat;
-	static private final String EDIT_IMG_URL = "/edit.png";
-	static private final String ADD_IMG_URL = "/add.png";
-	private static final String LOGIN_IMG_URL = "/login.png";
-	static private final int BUTTON_SIZE = 12;
 
     private Text quickAddText;
     private StackPane quickAddPane;
@@ -54,19 +37,6 @@ public class CategoryView extends VBox {
 		this.setAllTasks(cat.getTasks());
 		
 		this.setSpacing(10);
-		Image editImg = new Image(getClass().getResourceAsStream(EDIT_IMG_URL));
-		ImageView editView = new ImageView(editImg);
-		editView.setFitHeight(BUTTON_SIZE);
-		editView.setFitWidth(BUTTON_SIZE);
-		Button editButt = new Button("", editView);
-		editButt.setTooltip(new Tooltip("Change category name"));
-
-		Image addImg = new Image(getClass().getResourceAsStream(ADD_IMG_URL));
-		ImageView addView = new ImageView(addImg);
-		addView.setFitHeight(BUTTON_SIZE);
-		addView.setFitWidth(BUTTON_SIZE);
-		Button addButt = new Button("", addView);
-		addButt.setTooltip(new Tooltip("Add new task to this category"));
 		Label nameLabel = new Label(cat.getName());
 		HBox buffer = new HBox();
 		HBox.setHgrow(buffer, Priority.ALWAYS);
@@ -110,7 +80,8 @@ public class CategoryView extends VBox {
         ellipsis.setFitHeight(25);
         ellipsis.setFitWidth(25);
         MenuButton menuButton = new MenuButton(null, ellipsis, newTaskItem, renameCategoryItem, deleteCategoryItem);
-        String menuStyle = this.getStyle();
+        
+       // String menuStyle = this.getStyle();
         menuButton.getStylesheets().add("stylesheet.css");
 
 		ToolBar toolbar = new ToolBar(moveLeft, nameLabel, buffer, menuButton, moveRight);
@@ -146,7 +117,6 @@ public class CategoryView extends VBox {
 		});
 
 		newTaskItem.setOnAction(e -> {
-			//TODO: i want a popup window thatll create a new task + taskvc (make dummy vc while julian implements?)
 			Dialog<Task> dialog = new Dialog<>();
 			dialog.setTitle("New Task");
 			dialog.setHeaderText(null);
@@ -176,7 +146,7 @@ public class CategoryView extends VBox {
 			grid.add(desc, 1, 1);
 			grid.add(new Label("Date Due:"), 0, 2);
 			grid.add(dueDate, 1, 2);
-			//	        grid.add(signInMessage, 1, 2);
+
 
 			// Enable/Disable okay button depending on whether a name was entered.
 			Node okayButton = dialog.getDialogPane().lookupButton(loginButtonType);
@@ -214,43 +184,11 @@ public class CategoryView extends VBox {
 				this.getChildren().add(tasks.indexOf(taskvc) + 1, taskvc);
 
 				this.cat.addTask(task);
-				// DRAG-AND-DROP WIP
-				//                DataFormat taskDataFormat = new DataFormat("Task");
-				//                taskvc.setOnDragDetected(event -> {
-				//                    System.out.println("setOnDragDetected");
-				//                    Dragboard dragboard = taskvc.startDragAndDrop(TransferMode.MOVE);
-				//                    ClipboardContent content = new ClipboardContent();
-				//                    TaskViewController taskToTransfer = taskvc;
-				//                    content.put(taskDataFormat, taskToTransfer);
-				//                    dragboard.setContent(content);
-				//                    this.getChildren().remove(taskvc);
-				//                });
-				//
-				//                this.setOnDragDone(event -> System.out.println("setOnDragDone"));
-				//                this.setOnDragEntered(event -> {
-				//                    System.out.println("setOnDragEntered");
-				//                    taskvc.setBlendMode(BlendMode.DIFFERENCE);
-				//                });
-				//                this.setOnDragExited(event -> {
-				//                    System.out.println("setOnDragExited");
-				//                    taskvc.setBlendMode(null);
-				//                });
-				//                this.setOnDragOver(event -> {
-				//                    System.out.println("setOnDragOver");
-				//                    event.acceptTransferModes(TransferMode.MOVE);
-				//                });
-				//                this.setOnDragDropped(event -> {
-				//                    System.out.println("setOnDragDropped");
-				//                    TaskViewController taskToConsume = (TaskViewController) event.getDragboard().getContent(taskDataFormat);
-				//                    this.getChildren().add(taskToConsume);
-				//                });
+				
 			}
 		});
 
-		//TODO: erase this before turning it in
-		//as of rn im repeating that chunk of event handling cuz im dumb and bad at translating b/w lambda and anon inner classes
-
-		//this.setMinSize(200, 100);
+		
 		this.setMaxHeight(100);
 		this.getChildren().add(toolbar);
 		for (TaskViewController tv:tasks) {
