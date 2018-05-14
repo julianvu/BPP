@@ -1,12 +1,14 @@
 package views;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import models.Category;
 import models.Project;
@@ -19,7 +21,7 @@ public class ProjectView extends HBox {
 	private static final String ADD_IMG_URL = "/add.png";
 	private Project proj; 
 	private ArrayList<VBox> cats;
-	private static final String LOGIN_IMG_URL = "/login.png";
+	private static final String BG_IMG_URL = "/BG.png";
 
 	public ProjectView(Project proj) { 
 		super(10.0);
@@ -43,7 +45,6 @@ public class ProjectView extends HBox {
 		addButt.setLayoutY(100);
 		addBox.getChildren().add(addButt);
 		this.cats.add(addBox);
-		this.getChildren().add(addBox);
 
 		TextInputDialog newCat = new TextInputDialog("Category Name");
 		
@@ -59,16 +60,17 @@ public class ProjectView extends HBox {
 
 		//String catLayout = "-fx-border-color: black;\n" +
 			//			   ""
+		HBox buffer = new HBox();
+		HBox.setHgrow(buffer, Priority.ALWAYS);
 		
-		
-		Image bgImg = new Image(getClass().getResourceAsStream(LOGIN_IMG_URL));
+		Image bgImg = new Image(getClass().getResourceAsStream(BG_IMG_URL));
 		ImageView bgView = new ImageView(bgImg);
 		bgView.setFitHeight(BUTTON_SIZE);
 		bgView.setFitWidth(BUTTON_SIZE);
 		Button bgButt = new Button("", bgView);
 		bgButt.setTooltip(new Tooltip("Change Background"));
 		
-		this.getChildren().add(bgButt);
+		this.getChildren().addAll(addBox, buffer, bgButt);
 		
 		
 		addButt.setOnAction(e -> {
