@@ -38,6 +38,10 @@ public class CategoryView extends VBox {
 	private static final String LOGIN_IMG_URL = "/login.png";
 	static private final int BUTTON_SIZE = 12;
 
+    private Text quickAddText;
+    private StackPane quickAddPane;
+    private TextField quickAddField;
+
 	public CategoryView(Category cat) {
 		super();
 		this.setStyle("-fx-padding: 10;\n" +
@@ -253,10 +257,10 @@ public class CategoryView extends VBox {
 			this.getChildren().add(tasks.indexOf(tv) + 1, tv);
 		}
 
-		Text quickAddText = new Text("Quick-add a task...");
-		quickAddText.setWrappingWidth(150);
-		StackPane quickAddPane = new StackPane(quickAddText);
-		quickAddPane.setPadding(new Insets(10));
+        quickAddText = new Text("Quick-add a task...");
+        quickAddText.setWrappingWidth(150);
+        quickAddPane = new StackPane(quickAddText);
+        quickAddPane.setPadding(new Insets(10));
 		quickAddPane.setAlignment(Pos.CENTER_LEFT);
 		this.getChildren().add(quickAddPane);
 
@@ -265,8 +269,8 @@ public class CategoryView extends VBox {
 			quickAddPane.setOnMouseExited(event1 -> quickAddPane.setBackground(null));
 		});
 
-		TextField quickAddField = new TextField();
-		quickAddPane.setOnMouseClicked(event -> {
+        quickAddField = new TextField();
+        quickAddPane.setOnMouseClicked(event -> {
 			this.getChildren().remove(quickAddPane);
 			this.getChildren().add(quickAddField);
 			quickAddField.requestFocus();
@@ -328,6 +332,13 @@ public class CategoryView extends VBox {
             }
         }
     }
+
+    public void addTask(TaskViewController taskToAdd) {
+		tasks.add(taskToAdd);
+		cat.getTasks().add(taskToAdd.getTask());
+		this.getChildren().remove(quickAddPane);
+		this.getChildren().addAll(taskToAdd, quickAddPane);
+	}
 
 	ArrayList<TaskViewController> getTasks() {
 		return tasks;

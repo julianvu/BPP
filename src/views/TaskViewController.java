@@ -227,9 +227,7 @@ public class TaskViewController extends GridPane implements Serializable {
 
     private void moveTask(CategoryView otherCategory) {
         deleteTask();
-        otherCategory.getTasks().add(this);
-        otherCategory.getCategory().getTasks().add(this.getTask());
-        otherCategory.getChildren().add(this);
+        otherCategory.addTask(this);
     }
 
     private String getDate(Task task) {
