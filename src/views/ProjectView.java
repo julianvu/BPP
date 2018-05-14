@@ -39,19 +39,21 @@ public class ProjectView extends HBox {
 		addView.setFitWidth(BUTTON_SIZE);
 		Button addButt = new Button("", addView);
 		addButt.setTooltip(new Tooltip("Create new category"));
+		addBox.setAlignment(Pos.CENTER);
 		
-		
-		addButt.setLayoutX((addBox.getPrefWidth()-BUTTON_SIZE)/2);
-		addButt.setLayoutY(100);
+//		addButt.setLayoutX((addBox.getPrefWidth()-BUTTON_SIZE)/2);
+//		addButt.setLayoutY(200);
 		addBox.getChildren().add(addButt);
 		this.cats.add(addBox);
 
 		TextInputDialog newCat = new TextInputDialog("Category Name");
 		
-		String addLayout = "-fx-border-color: black;\n" +
-						   "-fx-border-style: dashed;\n" +
-				"-fx-border-radius: 5;\n";
+		String addLayout = "-fx-border-color: gray;\n" +
+						   "-fx-border-style: dotted;\n" +
+						   "-fx-border-radius: 5;\n";
 		addBox.setStyle(addLayout);
+		
+		
 
 		String bgStyle = "-fx-background-image: url(\"background1.jpg\");\n" +
                 "-fx-background-repeat: no-repeat;\n" +
